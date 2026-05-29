@@ -99,10 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             req.call(el).catch(() => { /* user gesture or browser blocked it — CSS mode still active */ });
         }
         syncTouchOverlay();
-        // Try to lock landscape on touch devices (best-effort, ignored where unsupported)
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').catch(() => {});
-        }
+        // Note: we intentionally do NOT lock orientation — let the user rotate freely.
     }
 
     function exitPlayMode() {
@@ -110,9 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
             const fn = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
             if (fn) fn.call(document).catch(() => {});
-        }
-        if (screen.orientation && screen.orientation.unlock) {
-            try { screen.orientation.unlock(); } catch (_) {}
         }
         syncTouchOverlay();
     }
